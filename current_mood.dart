@@ -1,23 +1,31 @@
-class Current {
-  final String mood;
-  final int moodScore;
-  final int stressLevel;
-  final int sleepQuality;
-  final int energyLevel;
+class CurrentMood {
+    final String mood;
+    final int moodScore;
+    final int stressLevel;
+    final int energyLevel;
+    final int sleepQuality;
 
-  Current({
-    required this.mood,
-    required this.moodScore,
-    required this.stressLevel,
-    required this.sleepQuality,
-    required this.energyLevel,
-  });
+    CurrentMood({
+        required this.mood,
+        required this.moodScore,
+        required this.stressLevel,
+        required this.energyLevel,
+        required this.sleepQuality,
+    });
 
-  factory Current.fromJson(Map<String, dynamic> json) => Current(
+    factory CurrentMood.fromJson(Map<String, dynamic> json) => CurrentMood(
         mood: json["mood"],
         moodScore: json["moodScore"],
         stressLevel: json["stressLevel"],
-        sleepQuality: json["sleepQuality"],
         energyLevel: json["energyLevel"],
-      );
+        sleepQuality: json["sleepQuality"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "mood": mood,
+        "moodScore": moodScore,
+        "stressLevel": stressLevel,
+        "energyLevel": energyLevel,
+        "sleepQuality": sleepQuality,
+    };
 }
