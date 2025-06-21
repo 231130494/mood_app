@@ -1,23 +1,23 @@
 class Forecast {
-  DateTime? date;
-  String? mood;
-  int? moodScore;
+    final DateTime date;
+    final String mood;
+    final int stressLevel;
 
-  Forecast({
-    this.date,
-    this.mood,
-    this.moodScore,
-  });
+    Forecast({
+        required this.date,
+        required this.mood,
+        required this.stressLevel,
+    });
 
-  factory Forecast.fromJson(Map<String, dynamic> json) => Forecast(
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+    factory Forecast.fromJson(Map<String, dynamic> json) => Forecast(
+        date: DateTime.parse(json["date"]),
         mood: json["mood"],
-        moodScore: json["moodScore"],
-      );
+        stressLevel: json["moodScore"],
+    );
 
-  Map<String, dynamic> toJson() => {
-        "date": date?.toIso8601String(),
+    Map<String, dynamic> toJson() => {
+        "date": date.toIso8601String(),
         "mood": mood,
-        "moodScore": moodScore,
-      };
+        "moodScore": stressLevel,
+    };
 }
