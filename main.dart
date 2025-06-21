@@ -1,58 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mood_app/view/login.dart';
 import 'package:mood_app/view/home.dart';
+import 'package:mood_app/controller/name_controller.dart';
+import 'package:mood_app/controller/load_data.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NameController()),
+        ChangeNotifierProvider(create: (_) => LoadDataController()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
   @override
-  State<MyApp> createState() => _MyAppState();
+  _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  String? userName;
-  bool isLoading = true;
+  String? _userName;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadUserName();
+    _checkUserName();
   }
 
-  Future<void> _loadUserName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> _checkUserName() async {
+    final prefs = await SharedPreferences.getInstance();
     setState(() {
-      userName = prefs.getString('userName');
-      isLoading = false;
+      _userName = prefs.getString('userName');
+      _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      // Menunggu loading dari SharedPreferences
-      return const MaterialApp(
-        home: Scaffold(
-          body: Center(child: CircularProgressIndicator()),
+    if (_isLoading) {
+      return MaterialApp(
+        home: const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
         ),
       );
     }
 
     return MaterialApp(
-      title: 'Mood App',
+      title: 'Weather App',
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+        fontFamily: 'Inter',
+        appBarTheme: const AppBarTheme(
+          foregroundColor: Colors.white,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
-      routes: {
-        
-        '/home': (context) => const HomePage(),
-      },
-      home: (userName == null || userName!.isEmpty)
-          ? const LoginPage()
-          : const HomePage(),
+      home: _userName != null && _userName!.isNotEmpty
+          ? const HomePage()
+          : const LoginPage(),
     );
   }
 }
